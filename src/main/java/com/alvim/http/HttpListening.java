@@ -14,8 +14,6 @@ public class HttpListening {
         ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(10);
         httpServer = HttpServer.create(new InetSocketAddress(port),0);
         httpServer.createContext("/",new HttpHandler());
-        httpServer.createContext("/customer/all", new HandlerCustomerGetAll());
-        httpServer.createContext("/all", new HandlerAllGet());
         httpServer.setExecutor(threadPoolExecutor);
         httpServer.start();
         return  httpServer;
