@@ -11,19 +11,9 @@ I did my best here!
 ## Paths POSTMAN
 - GET
 ```bash
-http://localhost:8989/all?type=customer
-```
-Retorna todos os customers que possuimos em cache!
-
-- GET
-
-```bash
 http://localhost:8989/customer/all
 ```
-Faz a mesma coisa do link acima! 
-
-
-
+Retorna todos os customers que possuimos em cache!
 
 ## UML
 
