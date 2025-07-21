@@ -27,7 +27,8 @@ public class Customers {
     @EndPointMethod(path = "/create",method = HttpMethodRequest.POST)
     public Customers createCustomer(String name){
         Customers dummy = new Customers();
-        dummy.createCustomer(name);
+        dummy.setName(name);
+        Customers.addList(dummy);
         return dummy;
 
     }

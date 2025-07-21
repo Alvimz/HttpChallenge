@@ -2,12 +2,14 @@ package com.alvim.http;
 
 import com.alvim.repository.HttpRepository;
 import com.alvim.repository.RepositoryClassMethod;
-import com.google.gson.Gson;
+import com.google.gson.*;
 import com.sun.net.httpserver.HttpExchange;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.nio.charset.StandardCharsets;
 
 public class HttpHandler implements com.sun.net.httpserver.HttpHandler {
@@ -29,20 +31,32 @@ public class HttpHandler implements com.sun.net.httpserver.HttpHandler {
         Class<?> clazz =element.getClazz();
         Method method = element.getMethod();
 
-        if(exchange.getRequestMethod().equals(HttpMethodRequest.POST.name())){
-            String payload = getValorGet(exchange);
-            /*
-                - Extrair o body da requisição!
-                - Desarialização em uma classe!
-
-             */
-
-        }
 
         try{
             Constructor<?> ctr = clazz.getConstructor();
             Object object = ctr.newInstance();
-            Object invoke = method.invoke(object);
+            String bodyHttpRequest = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
+
+            Object[] parametrs = null;
+
+            if(!bodyHttpRequest.isBlank()){
+                Class<?>[] paramType = method.getParameterTypes();
+                Parameter[] parametersMethod = method.getParameters();
+                JsonObject jsonObject  = JsonParser.parseString(bodyHttpRequest).getAsJsonObject();
+                parametrs = new Object[paramType.length];
+
+                for(int i=0; i<paramType.length; i++){
+                    String paramName = parametersMethod[i].getName();
+                    JsonElement paramJson = jsonObject.get(paramName);
+
+                parametrs[i] = gson.fromJson(paramJson,paramType[i]);
+                }
+
+                System.out.println("Desarilizando");
+            }
+
+
+            Object invoke = method.invoke(object,parametrs);
             sendJsonResponse(exchange,invoke);
 
         } catch (Exception e) {
@@ -69,8 +83,6 @@ public class HttpHandler implements com.sun.net.httpserver.HttpHandler {
     public String getValorGet(HttpExchange httpExchange){
         return httpExchange.getRequestURI().getQuery().split("=")[1];
     }
-
-
 
 
 }
