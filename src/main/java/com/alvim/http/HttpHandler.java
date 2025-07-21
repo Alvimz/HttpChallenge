@@ -51,8 +51,6 @@ public class HttpHandler implements com.sun.net.httpserver.HttpHandler {
 
                 parametrs[i] = gson.fromJson(paramJson,paramType[i]);
                 }
-
-                System.out.println("Desarilizando");
             }
 
 
