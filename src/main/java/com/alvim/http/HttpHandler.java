@@ -67,13 +67,13 @@ public class HttpHandler implements com.sun.net.httpserver.HttpHandler {
             Object[] parametrs = null;
 
             if(expectedBody && bodyHttpRequest.isBlank() || !expectedBody && !bodyHttpRequest.isBlank()){
-                exchange.sendResponseHeaders(405,-1);
+                exchange.sendResponseHeaders(400,-1);
                 return;
             }
 
+            Class<?>[] paramType = method.getParameterTypes();
 
-            if(!bodyHttpRequest.isBlank()){
-                Class<?>[] paramType = method.getParameterTypes();
+            if(paramType.length > 0){ //só entra caso o méto_do exija algum parâmetro
                 Parameter[] parametersMethod = method.getParameters();
                 JsonObject jsonObject  = JsonParser.parseString(bodyHttpRequest).getAsJsonObject();
                 parametrs = new Object[paramType.length];
@@ -81,6 +81,11 @@ public class HttpHandler implements com.sun.net.httpserver.HttpHandler {
                 for(int i=0; i<paramType.length; i++){
                     String paramName = parametersMethod[i].getName();
                     JsonElement paramJson = jsonObject.get(paramName);
+                    if(paramJson == null){
+                        exchange.sendResponseHeaders(422,-1);
+                        //exchange.close();
+                        return;
+                    }
 
                 parametrs[i] = gson.fromJson(paramJson,paramType[i]);
                 }
