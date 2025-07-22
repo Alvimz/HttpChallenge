@@ -12,7 +12,7 @@ import java.util.UUID;
 public class Customers {
     private UUID id = UUID.randomUUID();
     private String name;
-    private int idade;
+
     private static List<Customers> customersList = new ArrayList<>();
 
     @EndPointMethod(path = "/all",method = HttpMethodRequest.GET)
@@ -22,15 +22,15 @@ public class Customers {
     static {
         Customers c = new Customers();
         c.setName("Gabriel");
-        c.setIdade(21);
+
         Customers.addList(c);
     }
 
     @EndPointMethod(path = "/create",method = HttpMethodRequest.POST)
-    public Customers createCustomer(String name,int idade){
+    public Customers createCustomer(String name){
         Customers dummy = new Customers();
         dummy.setName(name);
-        dummy.setIdade(idade);
+
         Customers.addList(dummy);
         return dummy;
 
@@ -40,14 +40,16 @@ public class Customers {
         this.name = name;
     }
 
-    public void setIdade(int idade) {
-        this.idade = idade;
-    }
 
     public static void addList(Customers customers){
         customersList.add(customers);
     }
 
+    public UUID getId() {
+        return id;
+    }
 
-
+    public String getName() {
+        return name;
+    }
 }
