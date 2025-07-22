@@ -8,6 +8,7 @@ import org.reflections.Reflections;
 
 import java.lang.reflect.Method;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 public class HandlerEndpoints {
 
@@ -23,14 +24,18 @@ public class HandlerEndpoints {
             for(Method method: clazz.getMethods()){
                 if(!method.isAnnotationPresent(EndPointMethod.class)) continue;
 
+                Pattern pattern = null;
                 EndPointMethod endPointMethod = method.getAnnotation(EndPointMethod.class);
                 String pathMethod = endPointMethod.path(); // /all
 
                 String methodRequest = endPointMethod.method().name(); // GET,POST
                 String finalPath = methodRequest +":"+ classPath + pathMethod; // GET:/customer/all
+                String pathWithoutMethod = classPath + pathMethod;
 
-
-                RepositoryClassMethod classesMethods = new RepositoryClassMethod(clazz,method);
+                if(pathWithoutMethod.contains("{")){
+                    pattern = HandlerEndpoints.regexToPattern(pathWithoutMethod);
+                }
+                RepositoryClassMethod classesMethods = new RepositoryClassMethod(clazz,method,pattern);
 
                 HttpRepository.getCurrency().addElement(finalPath,classesMethods);
 
@@ -41,5 +46,10 @@ public class HandlerEndpoints {
 
 
         }
+
+    }
+    private static Pattern regexToPattern(String link){
+        String regex = link.replaceAll("\\{([^/]+)\\}", "(?<$1>[^/]+)");
+        return Pattern.compile("^" + regex + "$");
     }
 }
