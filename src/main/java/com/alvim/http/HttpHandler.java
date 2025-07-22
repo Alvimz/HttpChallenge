@@ -51,6 +51,7 @@ public class HttpHandler implements com.sun.net.httpserver.HttpHandler {
 
         if(element == null){
             exchange.sendResponseHeaders(405,-1);
+            return;
         }
 
         Class<?> clazz =element.getClazz();
@@ -61,8 +62,15 @@ public class HttpHandler implements com.sun.net.httpserver.HttpHandler {
             Constructor<?> ctr = clazz.getConstructor();
             Object object = ctr.newInstance();
             String bodyHttpRequest = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
+            boolean expectedBody = method.getParameterCount() > 0;
 
             Object[] parametrs = null;
+
+            if(expectedBody && bodyHttpRequest.isBlank() || !expectedBody && !bodyHttpRequest.isBlank()){
+                exchange.sendResponseHeaders(405,-1);
+                return;
+            }
+
 
             if(!bodyHttpRequest.isBlank()){
                 Class<?>[] paramType = method.getParameterTypes();
