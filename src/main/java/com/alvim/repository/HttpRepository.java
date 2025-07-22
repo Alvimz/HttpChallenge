@@ -25,5 +25,8 @@ public class HttpRepository {
         return classesMap.get(keyValue);
     }
 
+    public Map<String , RepositoryClassMethod> getRepository(){
+        return classesMap;
+    }
 
 }

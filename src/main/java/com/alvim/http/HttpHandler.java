@@ -11,6 +11,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
+import java.util.regex.Matcher;
 
 public class HttpHandler implements com.sun.net.httpserver.HttpHandler {
     Gson gson = new Gson();
@@ -20,14 +22,37 @@ public class HttpHandler implements com.sun.net.httpserver.HttpHandler {
         String path = exchange.getRequestURI().getPath();
         String routeKey = getHttpMethod(exchange) + ":" + path; //  "GET:/customer" -> Mesma coisa da primeira chave do Singleton!
 
-        if(!HttpRepository.getCurrency().isHere(routeKey)){
-            //verifica se existe a rota em cache!
-            //se sim, ele apenas continua!
-            exchange.sendResponseHeaders(405,-1);
-            return;
+        RepositoryClassMethod element = null;
+
+
+        if(HttpRepository.getCurrency().isHere(routeKey)){
+            element = HttpRepository.getCurrency().getElement(routeKey); //puxa a Classe e o méto_do caso sejam fixos!
+        }else {
+            String[] httpRequestPathCutted = cutPath(routeKey); //["POST","/customer/2123"]
+            for(Map.Entry<String, RepositoryClassMethod> entry: HttpRepository.getCurrency().getRepository().entrySet() ){
+                String routeRegistred = entry.getKey(); //rota registrada em cache > POST:/customer/{id}
+                RepositoryClassMethod classAndMethod = entry.getValue(); // classe , método e pattern
+
+                if(classAndMethod.getPattern()== null) continue; //deve conter pattern preenchido!
+
+                String[] registredPathCutted = cutPath(routeRegistred); //["POST","/customer/{id}"]
+
+                if(!registredPathCutted[0].equals(httpRequestPathCutted[0])) continue; //HttpRequest == HttpRequestCache
+
+                Matcher matcher = classAndMethod.getPattern().matcher(httpRequestPathCutted[1]);
+                if(matcher.matches()){
+                    element = classAndMethod;
+                    break;
+                }
+
+            }
 
         }
-        RepositoryClassMethod element = HttpRepository.getCurrency().getElement(routeKey); //puxa o elemento perante a key!
+
+        if(element == null){
+            exchange.sendResponseHeaders(405,-1);
+        }
+
         Class<?> clazz =element.getClazz();
         Method method = element.getMethod();
 
@@ -79,8 +104,9 @@ public class HttpHandler implements com.sun.net.httpserver.HttpHandler {
     }
 
     private String[] cutPath(String path){
-        return path.split(":", 2);
+        return path.split(":", 2); //["POST" , "/customer/123"]
     }
+
 
 
 }
