@@ -35,6 +35,13 @@ public class Customers {
         return dummy;
 
     }
+    @EndPointMethod(path = "/{id}",method = HttpMethodRequest.POST)
+    public Customers createNewCustomer(String name){
+        Customers dummy = new Customers();
+        dummy.setName(name);
+        Customers.addList(dummy);
+        return dummy;
+    }
 
     public void setName(String name) {
         this.name = name;

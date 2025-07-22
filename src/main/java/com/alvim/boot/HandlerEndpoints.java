@@ -33,14 +33,15 @@ public class HandlerEndpoints {
                 String pathWithoutMethod = classPath + pathMethod;
 
                 if(pathWithoutMethod.contains("{")){
-                    pattern = HandlerEndpoints.regexToPattern(pathWithoutMethod);
+                    pattern = HandlerEndpoints.regexToPattern(pathWithoutMethod); //faz o pattern do regex caso seja um link dinâmico!
+
                 }
                 RepositoryClassMethod classesMethods = new RepositoryClassMethod(clazz,method,pattern);
 
                 HttpRepository.getCurrency().addElement(finalPath,classesMethods);
 
 
-                System.out.println(finalPath);
+                System.out.println("Rota registrada: "+ finalPath);
 
             }
 

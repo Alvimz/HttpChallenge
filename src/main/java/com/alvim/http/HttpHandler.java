@@ -78,8 +78,8 @@ public class HttpHandler implements com.sun.net.httpserver.HttpHandler {
         }
     }
 
-    public String getValorGet(HttpExchange httpExchange){
-        return httpExchange.getRequestURI().getQuery().split("=")[1];
+    private String[] cutPath(String path){
+        return path.split(":", 2);
     }
 
 
