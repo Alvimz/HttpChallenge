@@ -17,8 +17,10 @@ import java.util.regex.Matcher;
 public class HttpHandler implements com.sun.net.httpserver.HttpHandler {
     Gson gson = new Gson();
 
+
     @Override
     public void handle(HttpExchange exchange) throws IOException {
+        String[] pathVals = null;
         String path = exchange.getRequestURI().getPath();
         String routeKey = getHttpMethod(exchange) + ":" + path; //  "GET:/customer" -> Mesma coisa da primeira chave do Singleton!
 
@@ -41,7 +43,16 @@ public class HttpHandler implements com.sun.net.httpserver.HttpHandler {
 
                 Matcher matcher = classAndMethod.getPattern().matcher(httpRequestPathCutted[1]);
                 if(matcher.matches()){
+                    //String group = matcher.group(1);
                     element = classAndMethod;
+
+
+                    pathVals = new String[matcher.groupCount()];
+                    for (int i = 1; i <= matcher.groupCount(); i++) {
+                        System.out.println(matcher.group(i));
+                        pathVals[i-1] = matcher.group(i);
+                    }
+
                     break;
                 }
 
@@ -87,7 +98,7 @@ public class HttpHandler implements com.sun.net.httpserver.HttpHandler {
                         return;
                     }
 
-                parametrs[i] = gson.fromJson(paramJson,paramType[i]);
+                    parametrs[i] = gson.fromJson(paramJson,paramType[i]);
                 }
             }
 
