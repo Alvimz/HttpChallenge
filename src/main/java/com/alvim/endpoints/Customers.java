@@ -6,11 +6,11 @@ import com.alvim.http.HttpMethodRequest;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+
 
 @Endpoint(path = "/customer")
 public class Customers {
-    private UUID id = UUID.randomUUID();
+    private int id;
     private String name;
 
     private static List<Customers> customersList = new ArrayList<>();
@@ -22,25 +22,29 @@ public class Customers {
     static {
         Customers c = new Customers();
         c.setName("Gabriel");
+        c.setId(123);
 
         Customers.addList(c);
     }
 
-    @EndPointMethod(path = "/create",method = HttpMethodRequest.POST)
-    public Customers createCustomer(String name){
-        Customers dummy = new Customers();
-        dummy.setName(name);
 
-        Customers.addList(dummy);
-        return dummy;
-
-    }
     @EndPointMethod(path = "/{id}",method = HttpMethodRequest.POST)
-    public Customers createNewCustomer(String name){
+    public Customers createNewCustomer(int id,String name){
         Customers dummy = new Customers();
         dummy.setName(name);
+        dummy.setId(id);
         Customers.addList(dummy);
         return dummy;
+    }
+
+    @EndPointMethod(path = "/{id}",method = HttpMethodRequest.GET)
+    public Customers findById(int id){
+        for(Customers customer: customersList){
+            if(customer.getId() == id){
+                return customer;
+            }
+        }
+        return  null;
     }
 
     public void setName(String name) {
@@ -52,7 +56,11 @@ public class Customers {
         customersList.add(customers);
     }
 
-    public UUID getId() {
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
         return id;
     }
 
