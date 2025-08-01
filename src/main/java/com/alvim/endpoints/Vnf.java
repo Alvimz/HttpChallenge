@@ -4,8 +4,14 @@ import com.alvim.annotations.EndPointMethod;
 import com.alvim.annotations.Endpoint;
 import com.alvim.http.HttpMethodRequest;
 import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.command.CreateVolumeResponse;
+import com.github.dockerjava.api.command.InspectVolumeResponse;
+import com.github.dockerjava.api.command.ListVolumesResponse;
+import com.github.dockerjava.api.model.Image;
 import com.github.dockerjava.core.DockerClientBuilder;
 
+import java.awt.*;
+import java.util.List;
 import java.util.UUID;
 
 @Endpoint(path = "/vnf")
@@ -17,12 +23,17 @@ public class Vnf {
     @EndPointMethod(path = "/create", method = HttpMethodRequest.POST)
     public void createVnf(){
         //todo pensar como usar o dinamismo das portas!
+        CreateVolumeResponse volumeResponse = dockerClient.createVolumeCmd().withName("vsec").exec();
+        //Criar o volume!
+
+
         /*
-        - Criar o volume!
+
         - Criar a pasta input/output!
         - Colocar os arquivos internamente!
         - Passar -e = "creation_vnf".
 
+        - Docker local para cada DC.
          */
 
     }

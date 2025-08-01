@@ -8,8 +8,11 @@ public class Main {
     public static void main(String[] args) {
         HttpListening httpListening = new HttpListening();
         HandlerEndpoints.start();
+        TemporaryFolders.createFolders();
+
         try{
             httpListening.start(8989);
+
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
