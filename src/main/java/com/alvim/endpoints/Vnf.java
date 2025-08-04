@@ -21,7 +21,7 @@ import java.util.UUID;
 public class Vnf {
     private UUID id;
     private String name;
-    DockerClient dockerClient = DockerClientBuilder.getInstance("tcp://192.168.2.93:2375").build();
+    DockerClient dockerClient = DockerClientBuilder.getInstance("unix:///var/run/docker.sock").build();
 
     @EndPointMethod(path = "/create", method = HttpMethodRequest.POST)
     public String createVnf(){
