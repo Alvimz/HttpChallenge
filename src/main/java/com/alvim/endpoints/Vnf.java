@@ -30,7 +30,7 @@ public class Vnf {
         //Criar o volume!
         HostConfig hostConfig = TemporaryFolders.createBind();
         CreateContainerResponse container = dockerClient.createContainerCmd("vsec:0.1")
-                .withHostConfig(hostConfig).withEnv("TASK=NADA").exec();
+                .withHostConfig(hostConfig).withEnv("TASK=creation_vnf").exec();
 
         String containerId = container.getId();
         dockerClient.startContainerCmd(containerId).exec();

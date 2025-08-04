@@ -26,14 +26,12 @@ public class TemporaryFolders {
         }
     }
 
-    public static void deleteFolders(){
-        //todo
-    }
 
     public static HostConfig createBind(){
         Path volumeVSEC = Paths.get("volumeVSEC").toAbsolutePath();
         String hostDir = volumeVSEC.toAbsolutePath().toString();
-        Volume containerVolume = new Volume("/vsec");
+        System.out.println(hostDir);
+        Volume containerVolume = new Volume("/task");
         Bind bind = new Bind(hostDir,containerVolume);
         return  HostConfig.newHostConfig().withBinds(bind);
     }
