@@ -1,5 +1,9 @@
 package com.alvim.boot;
 
+import com.github.dockerjava.api.model.Bind;
+import com.github.dockerjava.api.model.HostConfig;
+import com.github.dockerjava.api.model.Volume;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -25,5 +29,14 @@ public class TemporaryFolders {
     public static void deleteFolders(){
         //todo
     }
+
+    public static HostConfig createBind(){
+        Path volumeVSEC = Paths.get("volumeVSEC").toAbsolutePath();
+        String hostDir = volumeVSEC.toAbsolutePath().toString();
+        Volume containerVolume = new Volume("/vsec");
+        Bind bind = new Bind(hostDir,containerVolume);
+        return  HostConfig.newHostConfig().withBinds(bind);
+    }
+
 
 }
