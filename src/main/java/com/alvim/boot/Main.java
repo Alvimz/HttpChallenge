@@ -18,7 +18,7 @@ public class Main {
             throw new RuntimeException(e);
         }
         Runtime.getRuntime().addShutdownHook(new Thread(httpListening::close));
-        //Runtime.getRuntime().addShutdownHook(new Thread(TemporaryFolders::deleteFolders));
+
 
     }
 }

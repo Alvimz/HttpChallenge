@@ -6,11 +6,9 @@ import com.alvim.boot.TemporaryFolders;
 import com.alvim.http.HttpMethodRequest;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.command.CreateVolumeResponse;
-import com.github.dockerjava.api.command.InspectVolumeResponse;
-import com.github.dockerjava.api.command.ListVolumesResponse;
+
 import com.github.dockerjava.api.model.HostConfig;
-import com.github.dockerjava.api.model.Image;
+
 import com.github.dockerjava.core.DockerClientBuilder;
 
 import java.awt.*;
@@ -25,24 +23,19 @@ public class Vnf {
 
     @EndPointMethod(path = "/create", method = HttpMethodRequest.POST)
     public String createVnf(){
-        //todo pensar como usar o dinamismo das portas!
-        //CreateVolumeResponse volumeResponse = dockerClient.createVolumeCmd().withName("vsec").exec();
-        //Criar o volume!
         HostConfig hostConfig = TemporaryFolders.createBind();
         CreateContainerResponse container = dockerClient.createContainerCmd("vsec:0.1")
                 .withHostConfig(hostConfig).withEnv("TASK=creation_vnf").exec();
 
-        String containerId = container.getId();
+        String containerId = container.getId(); //pega o id do container!
         dockerClient.startContainerCmd(containerId).exec();
         System.out.println("Container iniciado: " + containerId);
 
         return  containerId;
         /*
 
-        - Criar a pasta input/output! :check:
-        - Colocar os arquivos internamente! :check:
         TODO: GITHUB DOCUMENTAÇÃO : - Passar -e = "creation_vnf".
-        - Passar o arquivo para o volume
+        TODO: criação da imagem do DOckerfile!
 
          */
 
