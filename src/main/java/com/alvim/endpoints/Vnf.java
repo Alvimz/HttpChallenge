@@ -26,13 +26,16 @@ public class Vnf {
     @EndPointMethod(path = "/create", method = HttpMethodRequest.POST)
     public String createVnf(){
         //todo pensar como usar o dinamismo das portas!
-        CreateVolumeResponse volumeResponse = dockerClient.createVolumeCmd().withName("vsec").exec();
+        //CreateVolumeResponse volumeResponse = dockerClient.createVolumeCmd().withName("vsec").exec();
         //Criar o volume!
         HostConfig hostConfig = TemporaryFolders.createBind();
         CreateContainerResponse container = dockerClient.createContainerCmd("vsec:0.1")
-                .withHostConfig(hostConfig).withCmd("sh","-c","echo preparado").exec();
+                .withHostConfig(hostConfig).withEnv("TASK=NADA").exec();
 
         String containerId = container.getId();
+        dockerClient.startContainerCmd(containerId).exec();
+        System.out.println("Container iniciado: " + containerId);
+
         return  containerId;
         /*
 
