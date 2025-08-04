@@ -1,0 +1,13 @@
+title Pipeline Listener
+MainThread -> HandlerEndpoints: Start
+HandlerEndpoints -> HandlerEndpoints: Varredura endpoint annotation!
+HandlerEndpoints -> RepositoryClassMethod: Classe e método
+MainThread -> FoldersVolume: Create folders
+HandlerEndpoints -> Singleton: finalPath + Repository(Class,Method)
+MainThread -> HttpListener: Starta com a porta
+HttpListener -> HttpListener: Cria context, Executor, handler.
+HttpListener -> HTTPHandler: Recebe a requisição
+HTTPHandler -> Singleton: Verifica se rota existe
+Singleton -> HTTPHandler: Classe e method
+HTTPHandler -> HTTPHandler: Invoke no método!
+HTTPHandler -> MainThread: HTTP Code + resultado request

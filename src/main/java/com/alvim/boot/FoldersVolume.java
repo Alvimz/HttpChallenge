@@ -20,7 +20,7 @@ public class FoldersVolume {
             Files.createDirectories(input);
             Files.createDirectories(output);
 
-            System.out.println("Pastas criadas com sucesso!");
+            System.out.println("Pastas criadas com sucesso > " +  rootDir.toAbsolutePath());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

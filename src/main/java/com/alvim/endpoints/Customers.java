@@ -15,7 +15,7 @@ public class Customers {
 
     private static List<Customers> customersList = new ArrayList<>();
 
-    @EndPointMethod(path = "/all",method = HttpMethodRequest.GET)
+    //@EndPointMethod(path = "/all",method = HttpMethodRequest.GET)
     public static List<Customers> getAllCustomers(){
         return customersList;
     }
@@ -28,7 +28,7 @@ public class Customers {
     }
 
 
-    @EndPointMethod(path = "/{id}",method = HttpMethodRequest.POST)
+    //@EndPointMethod(path = "/{id}",method = HttpMethodRequest.POST)
     public Customers createNewCustomer(int id,String name){
         Customers dummy = new Customers();
         dummy.setName(name);
@@ -37,7 +37,7 @@ public class Customers {
         return dummy;
     }
 
-    @EndPointMethod(path = "/{id}",method = HttpMethodRequest.GET)
+    //@EndPointMethod(path = "/{id}",method = HttpMethodRequest.GET)
     public Customers findById(int id){
         for(Customers customer: customersList){
             if(customer.getId() == id){

@@ -1,0 +1,13 @@
+title API pipeline
+
+User -> Java: Start the API
+User -> User: Put the input files inside folder
+User -> Java: HTTP Request
+Java -> DockerAPI: env + Docker image + Bind mounts
+DockerAPI -> Container: Spin up the container
+note left of Container
+    Ansible see the env and input files to
+    choose roles to work!
+end note
+Container -> DC: Do your job
+
