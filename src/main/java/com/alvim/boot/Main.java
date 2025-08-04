@@ -8,7 +8,7 @@ public class Main {
     public static void main(String[] args) {
         HttpListening httpListening = new HttpListening();
         HandlerEndpoints.start();
-        TemporaryFolders.createFolders();
+        FoldersVolume.createFolders();
 
         try{
             httpListening.start(8989);

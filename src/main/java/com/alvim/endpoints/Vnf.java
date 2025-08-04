@@ -2,7 +2,7 @@ package com.alvim.endpoints;
 
 import com.alvim.annotations.EndPointMethod;
 import com.alvim.annotations.Endpoint;
-import com.alvim.boot.TemporaryFolders;
+import com.alvim.boot.FoldersVolume;
 import com.alvim.http.HttpMethodRequest;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerResponse;
@@ -11,8 +11,6 @@ import com.github.dockerjava.api.model.HostConfig;
 
 import com.github.dockerjava.core.DockerClientBuilder;
 
-import java.awt.*;
-import java.util.List;
 import java.util.UUID;
 
 @Endpoint(path = "/vnf")
@@ -23,10 +21,10 @@ public class Vnf {
 
     @EndPointMethod(path = "/create", method = HttpMethodRequest.POST)
     public String createVnf(){
-        HostConfig hostConfig = TemporaryFolders.createBind();
+        HostConfig hostConfig = FoldersVolume.createBind();
         CreateContainerResponse container = dockerClient.createContainerCmd("vsec:0.1")
                 .withHostConfig(hostConfig).withEnv("TASK=creation_vnf").exec();
-
+        //o env TASK <- Dita qual vai ser a ação! Adicionar no ansible e no Java!
         String containerId = container.getId(); //pega o id do container!
         dockerClient.startContainerCmd(containerId).exec();
         System.out.println("Container iniciado: " + containerId);
@@ -34,8 +32,9 @@ public class Vnf {
         return  containerId;
         /*
 
-        TODO: GITHUB DOCUMENTAÇÃO : - Passar -e = "creation_vnf".
+
         TODO: criação da imagem do DOckerfile!
+        TODO: adicionar keep alive and ping na vnf.
 
          */
 
