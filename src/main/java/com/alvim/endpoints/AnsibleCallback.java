@@ -4,6 +4,9 @@ import com.alvim.annotations.EndPointMethod;
 import com.alvim.annotations.Endpoint;
 import com.alvim.http.HttpMethodRequest;
 
+import java.sql.Timestamp;
+import java.time.Instant;
+
 @Endpoint(path = "/ansible")
 public class AnsibleCallback {
     private String status;
@@ -16,9 +19,16 @@ public class AnsibleCallback {
         this.status = status;
     }
 
+
+
     @EndPointMethod(path = "/callback", method = HttpMethodRequest.POST)
-    public void handleCallback(String status){
-        System.out.println("Recebido :" + status);
+    public AnsibleCallback handleCallback(String status){
+        AnsibleCallback dummy = new AnsibleCallback();
+        dummy.setStatus(status);
+
+        System.out.println("Recebido :" + status + " hora: " + Instant.now());
+
+        return dummy;
 
     }
 }

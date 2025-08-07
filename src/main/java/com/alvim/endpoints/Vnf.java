@@ -22,7 +22,7 @@ public class Vnf {
     @EndPointMethod(path = "/create", method = HttpMethodRequest.POST)
     public String createVnf(){
         HostConfig hostConfig = FoldersVolume.createBind();
-        CreateContainerResponse container = dockerClient.createContainerCmd("vsec:0.1")
+        CreateContainerResponse container = dockerClient.createContainerCmd("vsec:0.11") //todo ficar atento aqui
                 .withHostConfig(hostConfig).withEnv("TASK=creation_vnf").exec();
         //o env TASK <- Dita qual vai ser a ação! Adicionar no ansible e no Java!
         String containerId = container.getId(); //pega o id do container!
