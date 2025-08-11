@@ -20,13 +20,14 @@ public class Vnf {
     private UUID id;
     private String name;
     DockerClient dockerClient = DockerClientBuilder.getInstance("unix:///var/run/docker.sock").build();
-    private String task_status;
+
 
 
     @EndPointMethod(path = "/create", method = HttpMethodRequest.POST)
     public Task createVnf(){
 
-        Task task = new Task(task_status);
+        Task task = new Task("VNF CREATION");
+
         UUID jobID = task.getJobID();
         TaskRepository.addTaskRepository(jobID,task);
 
@@ -37,7 +38,6 @@ public class Vnf {
         //o env TASK <- Dita qual vai ser a ação! Adicionar no ansible e no Java!
         String containerId = container.getId(); //pega o id do container!
         dockerClient.startContainerCmd(containerId).exec();
-        task_status = "Vnf_Creation";
 
 
 
