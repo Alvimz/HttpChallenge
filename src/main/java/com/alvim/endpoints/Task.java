@@ -14,8 +14,6 @@ import java.util.UUID;
 public class Task {
     private UUID jobID = UUID.randomUUID();
     private String status = "CRIADA"; //todo colocar enum aqui! [ERROR, COMPLETED]
-    private Instant startedAt = Instant.now();
-    private Instant finishedAt;
     private String objetive; //todo CRIACAO_VNF
 
     public Task(String objetive) {
@@ -28,9 +26,7 @@ public class Task {
         //todo procura a task por id no repositório
     }
 
-    public void setFinishedAt(Instant finishedAt) {
-        this.finishedAt = finishedAt;
-    }
+
 
     public void setObjetive(String objetive) {
         this.objetive = objetive;
@@ -48,13 +44,6 @@ public class Task {
         return status;
     }
 
-    public Instant getStartedAt() {
-        return startedAt;
-    }
-
-    public Instant getFinishedAt() {
-        return finishedAt;
-    }
 
     public String getObjetive() {
         return objetive;
