@@ -59,7 +59,4 @@ public class Task {
         return objetive;
     }
 
-    public void setStartedAt(LocalDateTime startedAt) {
-        this.startedAt = startedAt;
-    }
 }
