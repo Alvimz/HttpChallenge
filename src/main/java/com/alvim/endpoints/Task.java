@@ -6,16 +6,20 @@ import com.alvim.http.HttpMethodRequest;
 import com.alvim.repository.TaskRepository;
 
 import java.security.Timestamp;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Endpoint(path = "/task")
 public class Task {
     private UUID jobID = UUID.randomUUID();
-    private String status; //todo colocar enum aqui! [ERROR, COMPLETED]
-    private Timestamp startedAt;
-    private Timestamp finishedAt;
+    private String status = "CRIADA"; //todo colocar enum aqui! [ERROR, COMPLETED]
+    private LocalDateTime startedAt = LocalDateTime.now();
+    private LocalDateTime finishedAt;
     private String objetive; //todo CRIACAO_VNF
 
+    public Task(String objetive) {
+        this.objetive = objetive;
+    }
 
     @EndPointMethod(path = "/{jobID}", method = HttpMethodRequest.GET)
     public Task getTask(UUID jobID){
@@ -23,7 +27,7 @@ public class Task {
         //todo procura a task por id no repositório
     }
 
-    public void setFinishedAt(Timestamp finishedAt) {
+    public void setFinishedAt(LocalDateTime finishedAt) {
         this.finishedAt = finishedAt;
     }
 
@@ -43,15 +47,19 @@ public class Task {
         return status;
     }
 
-    public Timestamp getStartedAt() {
+    public LocalDateTime getStartedAt() {
         return startedAt;
     }
 
-    public Timestamp getFinishedAt() {
+    public LocalDateTime getFinishedAt() {
         return finishedAt;
     }
 
     public String getObjetive() {
         return objetive;
+    }
+
+    public void setStartedAt(LocalDateTime startedAt) {
+        this.startedAt = startedAt;
     }
 }
