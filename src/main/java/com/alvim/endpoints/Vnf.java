@@ -26,7 +26,8 @@ public class Vnf {
     @EndPointMethod(path = "/create", method = HttpMethodRequest.POST)
     public Task createVnf(){
 
-        Task task = new Task("VNF CREATION");
+        Task task = new Task();
+        task.setObjetive("VNF CREATION");
 
         UUID jobID = task.getJobID();
         TaskRepository.addTaskRepository(jobID,task);

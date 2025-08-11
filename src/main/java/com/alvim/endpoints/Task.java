@@ -16,9 +16,7 @@ public class Task {
     private String status = "CRIADA"; //todo colocar enum aqui! [ERROR, COMPLETED]
     private String objetive; //todo CRIACAO_VNF
 
-    public Task(String objetive) {
-        this.objetive = objetive;
-    }
+
 
     @EndPointMethod(path = "/{jobID}", method = HttpMethodRequest.GET)
     public Task getTask(UUID jobID){
