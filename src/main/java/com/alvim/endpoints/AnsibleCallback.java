@@ -27,7 +27,7 @@ public class AnsibleCallback {
     @EndPointMethod(path = "/callback", method = HttpMethodRequest.POST)
     public void handleCallback(UUID job_id, String status){
         Task taskRepository = TaskRepository.getTaskRepository(job_id);
-        taskRepository.setFinishedAt(LocalDateTime.now());
+        taskRepository.setFinishedAt(Instant.now());
         taskRepository.setStatus(status);
 
 
