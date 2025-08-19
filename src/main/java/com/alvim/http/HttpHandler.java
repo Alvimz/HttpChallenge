@@ -55,7 +55,7 @@ public class HttpHandler implements com.sun.net.httpserver.HttpHandler {
             }
         }
 
-        if(element == null){
+        if(element == null){ //caso a rota não exista!
             exchange.sendResponseHeaders(405,-1);
             return;
         }
@@ -66,36 +66,25 @@ public class HttpHandler implements com.sun.net.httpserver.HttpHandler {
         try{
             Constructor<?> ctr = clazz.getConstructor();
             Object object = ctr.newInstance();
+
             String bodyHttpRequest = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
+
             Class<?>[] paramType = method.getParameterTypes();
             Parameter[] methodParams = method.getParameters();
             Object[] parameters = new Object[paramType.length];
 
-            JsonObject bodyJson = bodyHttpRequest.isBlank() ? new JsonObject() : JsonParser.parseString(bodyHttpRequest).getAsJsonObject();
-            JsonObject JsonMap = new JsonObject();
-
-            if (pathValues != null) { //caso contenha path dynamic!
-
-                for (int i = 0; i < pathValues.length; i++) {
-                    String name = methodParams[i].getName();
-                    JsonMap.add(name, new JsonPrimitive(pathValues[i]));
+            for(int i = 0; i< paramType.length ; i++){
+                Object value = null;
+                if (pathValues != null && i < pathValues.length){
+                    value = pathValues[i];
+                }else {
+                    value = bodyHttpRequest.isBlank() ? null : bodyHttpRequest;
                 }
-            }
-
-
-            for (Map.Entry<String, JsonElement> entry : bodyJson.entrySet()) { //união do body do json com o do path
-                JsonMap.add(entry.getKey(), entry.getValue());
-            }
-
-
-            for (int i = 0; i < paramType.length; i++) {
-                String name = methodParams[i].getName();
-                JsonElement elem = JsonMap.get(name);
-                if (elem == null) { //caso a key não bata para a desarilização!
-                    exchange.sendResponseHeaders(422, -1);
+                if (value == null){
+                    exchange.sendResponseHeaders(400,-1);
                     return;
                 }
-                parameters[i] = gson.fromJson(elem, paramType[i]); //desarilização
+                parameters[i] = value;
             }
 
             Object result = method.invoke(object, parameters);

@@ -3,6 +3,7 @@ package com.alvim.endpoints;
 import com.alvim.annotations.EndPointMethod;
 import com.alvim.annotations.Endpoint;
 import com.alvim.http.HttpMethodRequest;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
 
 @Endpoint(path = "/customer")
 public class Customers {
-    private int id;
+    private String id;
     private String name;
 
     private static List<Customers> customersList = new ArrayList<>();
@@ -22,18 +23,19 @@ public class Customers {
     static {
         Customers c = new Customers();
         c.setName("Gabriel");
-        c.setId(123);
+        c.setId("123");
 
         Customers.addList(c);
     }
 
     @EndPointMethod(path = "/t", method = HttpMethodRequest.POST)
     public String exemploApi(String json){
-        return "recebido:" + json;
+        Customers customer  = new Gson().fromJson(json, Customers.class);
+        return "recebido - Nome:" + customer.getName() + "- id:"+ customer.getId() ;
     }
 
     //@EndPointMethod(path = "/{id}",method = HttpMethodRequest.POST)
-    public Customers createNewCustomer(int id,String name){
+    public Customers createNewCustomer(String id,String name){
         Customers dummy = new Customers();
         dummy.setName(name);
         dummy.setId(id);
@@ -41,10 +43,10 @@ public class Customers {
         return dummy;
     }
 
-    //@EndPointMethod(path = "/{id}",method = HttpMethodRequest.GET)
-    public Customers findById(int id){
+    @EndPointMethod(path = "/{id}",method = HttpMethodRequest.GET)
+    public Customers findById(String id){
         for(Customers customer: customersList){
-            if(customer.getId() == id){
+            if(customer.getId().equals(id)){
                 return customer;
             }
         }
@@ -60,11 +62,11 @@ public class Customers {
         customersList.add(customers);
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
