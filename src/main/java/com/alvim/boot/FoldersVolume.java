@@ -31,6 +31,7 @@ public class FoldersVolume {
         Path volumeVSEC = Paths.get("volumeVSEC").toAbsolutePath();
         String hostDir = volumeVSEC.toAbsolutePath().toString();
         System.out.println(hostDir);
+
         Volume containerVolume = new Volume("/task");
         Bind bind = new Bind(hostDir,containerVolume);
         return  HostConfig.newHostConfig().withBinds(bind);

@@ -27,6 +27,10 @@ public class Customers {
         Customers.addList(c);
     }
 
+    @EndPointMethod(path = "/t", method = HttpMethodRequest.POST)
+    public String exemploApi(String json){
+        return "recebido:" + json;
+    }
 
     //@EndPointMethod(path = "/{id}",method = HttpMethodRequest.POST)
     public Customers createNewCustomer(int id,String name){

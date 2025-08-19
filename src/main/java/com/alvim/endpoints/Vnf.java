@@ -26,30 +26,27 @@ public class Vnf {
     @EndPointMethod(path = "/create", method = HttpMethodRequest.POST)
     public Task createVnf(){
 
-        Task task = new Task();
+        Task task = new Task(); //cria a task
         task.setObjetive("VNF CREATION");
 
         UUID jobID = task.getJobID();
-        TaskRepository.addTaskRepository(jobID,task);
+        TaskRepository.addTaskRepository(jobID,task); //guarda em cache!
 
 
         HostConfig hostConfig = FoldersVolume.createBind();
         CreateContainerResponse container = dockerClient.createContainerCmd("vsec:0.11") //todo ficar atento aqui
                 .withHostConfig(hostConfig).withEnv("TASK=creation_vnf", "JOB_ID="+jobID.toString()).exec();
-        //o env TASK <- Dita qual vai ser a ação! Adicionar no ansible e no Java!
+        //o env TASK <- Dita qual vai ser a ação!
         String containerId = container.getId(); //pega o id do container!
         dockerClient.startContainerCmd(containerId).exec();
-
-
-
         System.out.println("Container iniciado: " + containerId);
 
         return task;
         /*
 
 
-        TODO: criação da imagem do DOckerfile!
-        TODO: adicionar keep alive and ping na vnf. Ansible uri!
+        TODO: criação da imagem do Dockerfile! < deixar para criar quando estiver completinho!
+        TODO:
 
          */
     }
