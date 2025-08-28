@@ -1,11 +1,7 @@
 package com.alvim.endpoints;
 
-import com.alvim.annotations.EndPointMethod;
 import com.alvim.annotations.Endpoint;
 import com.alvim.boot.FoldersVolume;
-import com.alvim.http.HttpMethodRequest;
-import com.alvim.repository.RepositoryClassMethod;
-import com.alvim.repository.TaskRepository;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 
@@ -23,32 +19,17 @@ public class Vnf {
 
 
 
-    @EndPointMethod(path = "/create", method = HttpMethodRequest.POST)
-    public Task createVnf(){
-
-        Task task = new Task(); //cria a task
-        task.setObjetive("VNF CREATION");
-
-        UUID jobID = task.getJobID();
-        TaskRepository.addTaskRepository(jobID,task); //guarda em cache!
-
-
-        HostConfig hostConfig = FoldersVolume.createBind();
-        CreateContainerResponse container = dockerClient.createContainerCmd("vsec:0.11") //todo ficar atento aqui
-                .withHostConfig(hostConfig).withEnv("TASK=creation_vnf", "JOB_ID="+jobID.toString()).exec();
-        //o env TASK <- Dita qual vai ser a ação!
-        String containerId = container.getId(); //pega o id do container!
-        dockerClient.startContainerCmd(containerId).exec();
-        System.out.println("Container iniciado: " + containerId);
-
-        return task;
-        /*
+    //@EndPointMethod(path = "/create", method = HttpMethodRequest.POST)
+    public void createVnf(){
+//        HostConfig hostConfig = FoldersVolume.createBind();
+//        CreateContainerResponse container = dockerClient.createContainerCmd("vsec:0.11") //todo lembrar da imagem ser essa
+//                .withHostConfig(hostConfig).withEnv("TASK=creation_vnf", "JOB_ID="+jobID.toString()).exec();
+//        //o env TASK <- Dita qual vai ser a ação!
+//        //String containerId = container.getId(); //pega o id do container!
+//        dockerClient.startContainerCmd(containerId).exec();
+//        System.out.println("Container iniciado: " + containerId);
 
 
-        TODO: criação da imagem do Dockerfile! < deixar para criar quando estiver completinho!
-        TODO:
-
-         */
     }
 
 
